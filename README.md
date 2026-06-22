@@ -21,6 +21,57 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Menjalankan dengan Docker
+
+### Prasyarat
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) sudah terinstall dan berjalan
+
+### Langkah-langkah
+
+**1. Clone repository**
+```bash
+git clone https://github.com/rezhawdan/php-laravel-sederhana.git
+cd php-laravel-sederhana
+```
+
+**2. Jalankan dengan Docker**
+```bash
+docker compose up -d
+```
+
+Perintah ini secara otomatis akan:
+- Build image Laravel (`webdevops/php-apache:8.2`)
+- Menjalankan MySQL dan menunggu hingga siap (*healthcheck*)
+- Menjalankan `composer install`
+- Menjalankan `php artisan migrate`
+- Menjalankan Apache
+
+**3. Akses aplikasi**
+
+Buka browser dan kunjungi: **http://localhost:8000**
+
+### Perintah Docker Lainnya
+
+| Perintah | Fungsi |
+|---|---|
+| `docker compose up -d` | Menjalankan semua container di background |
+| `docker compose up -d --build` | Rebuild image lalu jalankan (setelah ada perubahan) |
+| `docker compose ps` | Melihat status container |
+| `docker compose logs -f laravel-app` | Melihat log Laravel secara live |
+| `docker compose stop` | Menghentikan container |
+| `docker compose down` | Menghapus container (data MySQL tetap) |
+| `docker compose down -v` | Menghapus container + data MySQL |
+| `docker compose exec laravel-app bash` | Masuk ke dalam container Laravel |
+
+### Struktur Service
+
+| Service | Image | Port |
+|---|---|---|
+| `laravel-app` | `webdevops/php-apache:8.2` | `8000` |
+| `mysql-db` | `mysql:8.0` | `3306` |
+
+---
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.

@@ -191,6 +191,52 @@
             0%, 100% { opacity: 0.4; }
             50% { opacity: 1; }
         }
+
+        /* Register Button */
+        .btn-register {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 12px 28px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(129, 140, 248, 0.4);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        /* Success Alert */
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            animation: slideDown 0.5s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -201,6 +247,16 @@
 
     <div class="container">
         <div class="card">
+            <!-- Success Alert -->
+            @if(session('success'))
+                <div class="alert-success">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink: 0;">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
             <!-- Laravel Logo -->
             <div class="logo-container">
                 <svg class="logo-svg" viewBox="0 0 62 65" xmlns="http://www.w3.org/2000/svg">
@@ -213,6 +269,11 @@
 
             <!-- Description -->
             <p>Aplikasi web berbasis PHP Laravel sederhana berhasil disiapkan tanpa tool npm. Tampilan dimodifikasi menggunakan HTML &amp; CSS murni.</p>
+
+            <!-- Action Button -->
+            <div>
+                <a href="{{ route('register') }}" class="btn-register">Registrasi User</a>
+            </div>
 
             <!-- Status Badge -->
             <div class="status-badge">
