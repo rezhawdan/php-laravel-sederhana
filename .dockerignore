@@ -1,0 +1,28 @@
+# Mengabaikan dependensi lokal
+/vendor
+/node_modules
+
+# Mengabaikan konfigurasi environment lokal
+.env
+.env.backup
+.env.production
+
+# Mengabaikan Git dan repository metadata
+.git
+.gitignore
+.gitattributes
+
+# Mengabaikan file dokumentasi dan logs
+issue.md
+npm-debug.log
+yarn-error.log
+/storage/logs/*.log
+
+# Mengabaikan IDE config
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

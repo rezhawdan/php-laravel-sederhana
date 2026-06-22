@@ -1,0 +1,46 @@
+# Laravel-specific
+.env
+.env.backup
+.env.decrypted
+.env.production
+.env.local
+.env.*.local
+/auth.json
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+*.log
+
+# Testing
+.phpunit.result.cache
+.phpunit.cache/
+.pest_tracker
+.php-cs-fixer.cache
+.phpactor.json
+
+# Editors and IDEs
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
