@@ -1,21 +1,29 @@
-# Rencana Setup Project PHP Laravel Sederhana
+# Rencana Fitur Registrasi User & Konfigurasi Database Docker
 
-Rencana inisiasi project Laravel minimalis dengan halaman utama "Hello World", styling CSS sederhana (tanpa build tools/npm), serta dukungan container menggunakan Docker.
+Rencana high-level untuk mengimplementasikan fitur registrasi user dengan penyimpanan database MySQL menggunakan Docker Compose, serta antarmuka sederhana tanpa npm.
 
 ---
 
-## 1. Setup Project Laravel
-- Inisialisasi project Laravel baru (misalnya menggunakan Composer).
-- Konfigurasi environment dasar pada file `.env`.
+## 1. Setup Database dengan Docker Compose
+- Buat file `docker-compose.yml` yang mendefinisikan service:
+  - **laravel-app**: Service untuk aplikasi Laravel (menggunakan Dockerfile yang ada).
+  - **mysql-db**: Service database MySQL yang dapat diakses oleh container Laravel.
+- Konfigurasi file `.env` di Laravel untuk menghubungkan ke service database MySQL tersebut.
 
-## 2. Pembuatan Halaman Utama ("Hello World")
-- Sesuaikan route default di `routes/web.php` agar mengarah ke halaman utama.
-- Buat template view baru (misal: `resources/views/home.blade.php`) dengan pesan **"Hello World"**.
-- Terapkan styling CSS sederhana:
-  - Menggunakan CSS internal atau file stylesheet statis di folder `public/`.
-  - **Catatan:** Tidak menggunakan npm, Vite, Tailwind build, atau pustaka frontend compiler lainnya.
+## 2. Struktur Database (Migration)
+- Pastikan migration tabel `users` memiliki kolom yang sesuai:
+  - `name` (nama lengkap)
+  - `email` (unik)
+  - `password`
 
-## 3. Containerisasi dengan Docker
-- Buat `Dockerfile` untuk setup environment PHP yang memadai beserta dependensi yang dibutuhkan oleh Laravel.
-- Buat file `.dockerignore` untuk membatasi file/folder yang disalin ke dalam container image (misal mengabaikan `vendor`, `.env`, dll).
-- Sediakan konfigurasi server dasar (Apache/Nginx/PHP-FPM) di dalam container untuk menyajikan aplikasi Laravel.
+## 3. Logika Registrasi (Controller & Route)
+- Buat route untuk menampilkan halaman registrasi (GET) dan memproses registrasi (POST).
+- Buat Controller (misal: `RegisterController`) untuk memproses pendaftaran:
+  - Validasi input (nama lengkap, email, password).
+  - Simpan data user ke database dengan password dienkripsi menggunakan `bcrypt` (`Hash::make`).
+  - Redirect user setelah berhasil mendaftar (misal ke halaman utama dengan pesan sukses).
+
+## 4. Antarmuka Registrasi (View & Style)
+- Buat template view baru (misal: `resources/views/auth/register.blade.php`).
+- Sediakan form input: Nama Lengkap, Email, Password, dan Konfirmasi Password.
+- Terapkan styling CSS sederhana menggunakan CSS internal atau file stylesheet statis di folder `public/` (tanpa instalasi npm/build tools).
