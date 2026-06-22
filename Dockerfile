@@ -1,46 +1,27 @@
-# Menggunakan image PHP 8.2 dengan Apache
-FROM php:8.2-apache
+# Menggunakan image webdevops/php-apache yang sudah include semua PHP extensions
+# Tidak perlu apt-get install — menghindari masalah read-only filesystem di Docker Desktop Windows
+FROM webdevops/php-apache:8.2
 
-# Mengatur environment variable untuk Apache DocumentRoot
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-
-# Mengubah konfigurasi Apache untuk mengarahkan root ke direktori /public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Mengaktifkan modul rewrite Apache untuk Laravel routing
-RUN a2enmod rewrite
-
-# Menginstal dependensi sistem dan ekstensi PHP yang dibutuhkan Laravel
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql gd zip bcmath \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Menyalin Composer dari official image Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Mengatur DocumentRoot ke folder /public milik Laravel
+ENV WEB_DOCUMENT_ROOT=/app/public
+ENV PHP_DISPLAY_ERRORS=0
+ENV PHP_MEMORY_LIMIT=512M
 
 # Mengatur direktori kerja
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Menyalin seluruh kode aplikasi Laravel ke dalam container
-COPY . /var/www/html
+# Menyalin Composer dari official image
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Menginstal dependensi Composer (package PHP)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Menyalin seluruh kode aplikasi
+COPY . /app
 
-# Mengatur hak akses kepemilikan untuk folder storage dan bootstrap/cache agar apache bisa menulis log/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Menyalin dan mengatur entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-# Menentukan port yang digunakan container
+# Menentukan port
 EXPOSE 80
 
-# Jalankan server Apache di foreground
-CMD ["apache2-foreground"]
+# Menggunakan entrypoint custom untuk install deps, migrate, lalu start Apache
+ENTRYPOINT ["/docker-entrypoint.sh"]
